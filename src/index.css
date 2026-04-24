@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-black font-mono antialiased underline-offset-4;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  
+  div, header, nav, section, article, table, tr, th, td, input, textarea {
+    @apply rounded-none shadow-none;
+  }
+
+  button {
+    @apply transition-none cursor-pointer rounded-none;
+  }
+
+  button:not(.bg-white):not(.bg-transparent):not(.bg-red-500):not(.bg-red-600) {
+  }
+  
+  input, select, textarea {
+    @apply bg-white text-black border-2 border-black px-3 py-2 outline-none focus:ring-2 focus:ring-black;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold uppercase tracking-tighter;
+  }
+}
+
+.text-white { color: white !important; }
+.text-black { color: black !important; }
+.bg-black { background-color: black !important; color: white !important; }
+.bg-white { background-color: white !important; color: black !important; }
+
+.bg-black .text-black, 
+.bg-slate-900 .text-black,
+.bg-gray-900 .text-black {
+  color: white !important;
+}
+
+
+button.hover\:bg-white:hover {
+  background-color: white !important;
+  color: black !important;
+}
+
+button.hover\:bg-black:hover {
+  background-color: black !important;
+  color: white !important;
+}
+
+.bg-slate-900, .bg-slate-800 {
+  background-color: black !important;
+  border: 1px solid white !important;
+}
+
+.bg-black *, .bg-gray-900 * {
+  color: inherit;
+  border-color: inherit;
+}
+.bg-black h1, .bg-black h2, .bg-black h3, .bg-black h4, .bg-black h5, .bg-black h6, .bg-black p, .bg-black span, .bg-black div, .bg-black svg {
+  color: white !important;
+}
