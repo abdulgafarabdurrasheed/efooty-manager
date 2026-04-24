@@ -4,13 +4,27 @@ import { Briefcase, Plus, ArrowRight, Calendar, Users, Activity, Star, ChevronRi
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from './firebase';
 
+const DEPARTMENTS = [
+  { id: 'ALL', label: 'All Initiatives' },
+  { id: 'ENGINEERING', label: 'Product Engineering' },
+  { id: 'SALES', label: 'Direct Sales' },
+  { id: 'MARKETING', label: 'Marketing' },
+  { id: 'OTHER', label: 'Cross-Functional' }
+];
+
+const WORK_MODELS = [
+  { id: 'ALL', label: 'All Platforms' },
+  { id: 'MOBILE', label: 'Remote' },
+  { id: 'HYBRID', label: 'Hybrid/PC' },
+  { id: 'CONSOLE', label: 'On-site' }
+];
 
 export default function Dashboard({ user }) {
   const [activeProjects, setActiveProjects] = useState([]);
   const [openProjects, setOpenProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [gameFilter, setGameFilter] = useState("ALL");
-  const [platformFilter, setPlatformFilter] = useState("ALL");
+  const [departmentFilter, setDepartmentFilter] = useState("ALL");
+  const [workModelFilter, setWorkModelFilter] = useState("ALL");
   const [copiedId, setCopiedId] = useState(null);
   const navigate = useNavigate();
 
@@ -197,19 +211,19 @@ export default function Dashboard({ user }) {
                     className="font-mono w-full bg-white border border-2 border-black rounded-none pl-12 pr-4 py-3 text-black focus:ring-2 focus:ring-yellow-500 outline-none transition-all"
                   />
                 </div>
-                <select 
-                  value={gameFilter}
-                  onChange={(e) => setGameFilter(e.target.value)}
-                  className="font-mono bg-white border border-2 border-black rounded-none px-4 py-3 text-black focus:ring-2 focus:ring-yellow-500 outline-none"
+                 <select 
+                  className="font-mono bg-white text-black border border-2 border-black p-2 md:p-3 w-full md:w-auto font-bold appearance-none rounded-none focus:outline-none cursor-pointer focus:-translate-y-1 transition-transform"
+                  value={departmentFilter}
+                  onChange={(e) => setDepartmentFilter(e.target.value)}
                 >
-                  {GAMES.map(g => <option key={g.id} value={g.id}>{g.label}</option>)}
+                  {DEPARTMENTS.map(g => <option key={g.id} value={g.id}>{g.label}</option>)}
                 </select>
                 <select 
-                  value={platformFilter}
-                  onChange={(e) => setPlatformFilter(e.target.value)}
-                  className="font-mono bg-white border border-2 border-black rounded-none px-4 py-3 text-black focus:ring-2 focus:ring-yellow-500 outline-none"
+                  className="font-mono bg-white text-black border border-2 border-black p-2 md:p-3 w-full md:w-auto font-bold appearance-none rounded-none focus:outline-none cursor-pointer focus:-translate-y-1 transition-transform"
+                  value={workModelFilter}
+                  onChange={(e) => setWorkModelFilter(e.target.value)}
                 >
-                  {PLATFORMS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                  {WORK_MODELS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
                 </select>
               </div>
 
@@ -225,23 +239,14 @@ export default function Dashboard({ user }) {
                     <div key={t.id} className="font-mono bg-white border border-2 border-black p-4 rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white transition-colors group">
                       <div>
                         <h4 className="font-mono font-bold text-black text-lg">{t.name}</h4>
-                        <div className="font-mono flex items-center gap-3 text-xs text-black mt-1 flex-wrap">
-                          <span className="font-mono flex items-center gap-1 bg-white px-2 py-0.5 rounded text-black">
-                            <Users size={12} /> {t.participants?.length || 0}/{t.maxTeams || '?'}
-                          </span>
-                          {t.game && (
-                            <span className="font-mono flex items-center gap-1 bg-white px-2 py-0.5 rounded text-black">
-                              <Gamepad2 size={12} /> {GAMES.find(g => g.id === t.game)?.label || t.game}
+                        <div className="font-mono flex items-center gap-4 text-black text-xs font-bold uppercase tracking-wider">
+                            <span className="font-mono flex items-center gap-1.5 opacity-80">
+                              <Network size={12} /> {DEPARTMENTS.find(g => g.id === t.game)?.label || t.game}
                             </span>
-                          )}
-                          {t.platform && (
-                            <span className="font-mono flex items-center gap-1 bg-white px-2 py-0.5 rounded text-black">
-                              <Monitor size={12} /> {PLATFORMS.find(p => p.id === t.platform)?.label || t.platform}
+                            <span className="font-mono flex items-center gap-1.5 opacity-80">
+                              <Laptop size={12} /> {WORK_MODELS.find(p => p.id === t.platform)?.label || t.platform}
                             </span>
-                          )}
-                          <span>Hosted by <span className="font-mono text-black font-bold">{t.hostName || 'Unknown'}</span></span>
-                          <span className="font-mono uppercase border border-2 border-black px-1.5 rounded text-[10px]">{t.format}</span>
-                        </div>
+                          </div>
                       </div>
                       <div className="font-mono flex items-center gap-2">
                         <button 

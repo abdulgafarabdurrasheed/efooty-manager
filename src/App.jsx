@@ -9,10 +9,17 @@ import TournamentView from './TournamentView';
 import ProfileView from './ProfileView';
 import TournamentWizard from './TournamentWizard';
 import NotFound from './components/NotFound';
+import InteractiveDemo from './components/InteractiveDemo';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showDemo, setShowDemo] = useState(() => !localStorage.getItem('hasSeenDemo'));
+
+  const handleDemoComplete = () => {
+    localStorage.setItem('hasSeenDemo', 'true');
+    setShowDemo(false);
+  }
 
   useEffect(() => {
     const timeoutId = setTimeout(() => setLoading(false), 2000);
@@ -53,20 +60,24 @@ export default function App() {
 
         <main>
           {!user ? (
-            <div className="font-mono flex flex-col items-center justify-center h-[80vh] text-center space-y-6 px-4">
-              <div className="font-mono bg-white p-6 rounded-none mb-4 shadow-none shadow-none/10 ring-1 ring-slate-800">
-                <Briefcase size={64} className="font-mono text-black" />
+            showDemo ? (
+              <InteractiveDemo onComplete={handleDemoComplete} />
+            ) : (
+              <div className="font-mono flex flex-col items-center justify-center h-[80vh] text-center space-y-6 px-4">
+                <div className="font-mono bg-white p-6 rounded-none mb-4 shadow-none shadow-none/10 ring-1 ring-slate-800">
+                  <Briefcase size={64} className="font-mono text-black" />
+                </div>
+                <h2 className="font-mono text-4xl md:text-5xl font-black text-black tracking-tight">
+                  Welcome to <span className="font-mono text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">E.F.O.O.T.Y Director</span>
+                </h2>
+                <p className="font-mono text-black max-w-lg text-lg leading-relaxed">
+                  The ultimate project tracker for your local initiatives. Sign in to manage your organization, track KPIs, and hit revenue targets.
+                </p>
+                <div className="font-mono mt-8 transform scale-110">
+                  <LoginButton />
+                </div>
               </div>
-              <h2 className="font-mono text-4xl md:text-5xl font-black text-black tracking-tight">
-                Welcome to <span className="font-mono text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">E.F.O.O.T.Y Director</span>
-              </h2>
-              <p className="font-mono text-black max-w-lg text-lg leading-relaxed">
-                The ultimate project tracker for your local leagues. Sign in to manage your organization, track KPIs, and hit revenue targets.
-              </p>
-              <div className="font-mono mt-8 transform scale-110">
-                <LoginButton />
-              </div>
-            </div>
+            )
           ) : (
             <Routes>
               <Route path="/" element={<Dashboard user={user} />} />
