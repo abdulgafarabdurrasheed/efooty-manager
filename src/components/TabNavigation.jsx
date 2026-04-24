@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, BarChart3, Calendar, TrendingUp, Network, Zap, Shirt } from 'lucide-react';
+import { Users, BarChart3, Calendar, TrendingUp, Network, Zap, Shirt, KanbanSquare } from 'lucide-react';
 
 export default function TabNavigation({ 
   activeTab, 
@@ -32,6 +32,12 @@ export default function TabNavigation({
           className={`shrink-0 px-4 py-2 rounded-none md:rounded-none text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'fixtures' ? 'bg-white text-black shadow-none' : 'bg-white border border-2 border-black text-black hover:text-black'}`}
         >
           <Calendar size={16} /> Sprints
+        </button>
+        <button 
+          onClick={() => setActiveTab('pipeline')}
+          className={`shrink-0 px-4 py-2 rounded-none md:rounded-none text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === 'pipeline' ? 'bg-orange-500 text-black shadow-none' : 'bg-white border border-2 border-black text-black hover:text-black'}`}
+        >
+          <KanbanSquare size={16} /> Pipeline
         </button>
         {isLeague && (
           <button 

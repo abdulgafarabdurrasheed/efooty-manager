@@ -16,6 +16,7 @@ import BracketView from './components/BracketView';
 import FixturesList from './components/FixturesList';
 import AIOracle from './components/AIOracle';
 import SquadViewer from './components/SquadViewer';
+import SprintPipeline from './components/SprintPipeline';
 import PlayerCard from './components/PlayerCard';
 import OnboardingTour from './components/OnboardingTour';
 import Toast from './components/Toast';
@@ -39,7 +40,7 @@ export default function ProjectView() {
     project, 
     players, 
     squadPlayers, 
-    matches, 
+    matches,
     recentReviews, 
     leaderboard,
     getHighlights,
@@ -176,8 +177,9 @@ export default function ProjectView() {
           players={players}
           user={user}
         />
-
-        {activeTab === 'oracle' ? (
+        {activeTab === 'pipeline' ? (
+          <SprintPipeline project={project} user={user} />
+        ) : activeTab === 'oracle' ? (
           <AIOracle project={project} projectName={project.name} directors={players} squadPlayers={squadPlayers} matches={matches} />
         ) : activeTab === 'squad' ? (
           <SquadViewer user={user} onSyncSquad={actions.handleSyncSquad} isEnded={project.status === 'ended'} />
