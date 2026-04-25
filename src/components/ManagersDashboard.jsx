@@ -4,6 +4,7 @@ import LeagueTable, { MultiGroupTables } from './LeagueTable';
 import RecentActivity from './RecentActivity';
 import JoinLeagueButton from './JoinLeagueButton';
 import PipModal from './PipModal';
+import StandupFeed from './StandupFeed';
 
 
 export default function ManagersDashboard({ 
@@ -108,7 +109,27 @@ export default function ManagersDashboard({
       </div>
 
       <div className="space-y-6">
-        <RecentActivity recentReviews={recentReviews} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <div className="font-mono animate-in fade-in slide-in-from-right-8 duration-500 delay-300">
+             <StandupFeed projectId={project.id} user={user} />
+          </div>
+
+          <div className="font-mono bg-white  border border-2 border-black shadow-none overflow-hidden animate-in fade-in slide-in-from-right-8 duration-500 delay-300">
+            <div className="font-mono p-4 border-b border-2 border-black bg-white flex justify-between items-center">
+              <h2 className="font-mono text-lg font-bold text-black uppercase tracking-tighter">Sprint Logs</h2>
+              <span className="font-mono text-xs font-bold text-black border border-2 border-black px-2 py-1 rounded-none uppercase">Last 5</span>
+            </div>
+            <div className="font-mono p-0">
+               <RecentActivity 
+                  recentReviews={recentReviews} 
+                  players={players} 
+                  matches={matches}
+               />
+            </div>
+          </div>
+          
+        </div>
       </div>
       {selectedPipPlayer && (
         <PipModal 
