@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState  } from 'react';
 import { Activity, GitBranch, Network, Crown, Trash2, LayoutTemplate } from 'lucide-react';
 import LeagueTable, { MultiGroupTables } from './LeagueTable';
 import RecentActivity from './RecentActivity';
 import JoinLeagueButton from './JoinLeagueButton';
+import PipModal from './PipModal';
 
 
 export default function ManagersDashboard({ 
@@ -26,6 +27,7 @@ export default function ManagersDashboard({
   const showJoinButton = project?.status !== 'ended' && project?.status !== 'ACTIVE';
   const isKnockout = project?.format === 'KNOCKOUT';
   const isHybridMultiGroup = project?.format === 'HYBRID' && project?.settings?.hybridConfig?.type === 'MULTI_GROUP';
+  const [selectedPipPlayer, setSelectedPipPlayer] = useState(null);
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 pb-20">
@@ -99,6 +101,7 @@ export default function ManagersDashboard({
                   onViewFormation={onViewFormation}
                   onOpenAdminModal={onOpenAdminModal}
                   onRemoveDirector={onRemoveDirector}
+                  onPipClick={setSelectedPipPlayer}
                 />
           )}
         </div>
@@ -107,6 +110,12 @@ export default function ManagersDashboard({
       <div className="space-y-6">
         <RecentActivity recentReviews={recentReviews} />
       </div>
+      {selectedPipPlayer && (
+        <PipModal 
+          player={selectedPipPlayer} 
+          onClose={() => setSelectedPipPlayer(null)} 
+        />
+      )}
     </div>
   );
 }

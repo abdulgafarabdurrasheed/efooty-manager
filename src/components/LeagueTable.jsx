@@ -13,7 +13,8 @@ export default function LeagueTable({
   onPlayerClick, 
   onViewFormation,
   onOpenAdminModal,
-  onRemoveDirector
+  onRemoveDirector,
+  onPipClick
 }) {
   return (
     <div className="overflow-x-auto mb-8">
@@ -42,79 +43,22 @@ export default function LeagueTable({
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <td className="p-4 text-center font-mono text-black group-hover:text-black">{index + 1}</td>
-              <td className="p-4 cursor-pointer" onClick={() => onPlayerClick(player)}>
+              <td className="p-4 cursor-pointer hover:bg-gray-100 transition-colors group">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-none bg-white flex items-center justify-center border border-2 border-black">
-                    <span className="text-xs font-bold">{player.team ? player.team.substring(0,2).toUpperCase() : 'FC'}</span>
+                  <div onClick={() => onPlayerClick(player)} className="font-bold text-black uppercase tracking-tighter text-lg md:text-xl group-hover:underline">
+                    {player.name}
                   </div>
-                  <div>
-                    <div className="font-bold text-black group-hover:text-black transition-colors flex items-center gap-2">
-                      {player.name}
-                      
-                      {(() => {
-                        const isOwner = user.uid === project.ownerId;
-                        const isAdmin = project.admins?.includes(player.uid);
-                        const isSelf = user.uid === player.uid;
-
-                        if (isOwner && !isSelf) {
-                          return (
-                            <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
-                              <button 
-                                onClick={() => onOpenAdminModal(player.uid, player.name, isAdmin)}
-                                className={`p-1.5 rounded-none transition-all ${isAdmin ? 'text-black bg-black text-white border-2 border-black hover:bg-white hover:text-black hover:bg-red-500/20 hover:text-red-500' : 'text-black hover:text-black hover:bg-white'}`}
-                                title={isAdmin ? "Remove Admin" : "Make Admin"}
-                              >
-                                <Crown size={18} className={isAdmin ? "fill-yellow-500 hover:fill-red-500" : ""} />
-                              </button>
-                              <button 
-                                onClick={() => onRemoveDirector(player.uid, player.name)}
-                                className="p-1.5 rounded-none text-black hover:text-red-500 hover:bg-red-500/10 transition-all"
-                                title="Remove from Project"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </div>
-                          );
-                        }
-
-                        if (project.admins?.includes(user.uid) && !isSelf && player.uid !== project.ownerId && !project.admins?.includes(player.uid)) {
-                           return (
-                            <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
-                              <button 
-                                onClick={() => onRemoveDirector(player.uid, player.name)}
-                                className="p-1.5 rounded-none text-black hover:text-red-500 hover:bg-red-500/10 transition-all"
-                                title="Remove from Project"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </div>
-                           );
-                        }
-
-                        if (isAdmin) {
-                          return <Crown size={16} className="text-black fill-yellow-500" />;
-                        }
-
-                        return null;
-                      })()}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-xs text-black">{player.team}</div>
-                      <div className="flex gap-1">
-                        {getFormGuide(player.id, matches).map((res, i) => (
-                          <div 
-                            key={i} 
-                            className={`w-2 h-2 rounded-none ${
-                              res === 'W' ? 'bg-green-500' : 
-                              res === 'D' ? 'bg-white' : 
-                              'bg-red-500'
-                            }`} 
-                            title={res}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  {(player.goalsDifference || 0) < 0 && (
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); onPipClick(player); }}
+                      className="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 uppercase tracking-widest animate-pulse border-2 border-black hover:bg-black transition-colors"
+                    >
+                      P.I.P.
+                    </button>
+                  )}
+                </div>
+                <div className="text-xs text-black font-bold uppercase tracking-widest mt-1 opacity-60">
+                  {player.department || 'Associate'}
                 </div>
               </td>
               <td className="p-4 text-center font-mono text-black hidden sm:table-cell">{player.matchesPlayed}</td>
