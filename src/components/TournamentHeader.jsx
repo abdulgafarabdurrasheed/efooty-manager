@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, Settings, Share2 } from 'lucide-react';
+import { Briefcase, Settings, Share2, Printer } from 'lucide-react';
 import { UserProfile } from './AuthComponents';
 
 
@@ -40,7 +40,7 @@ export default function ProjectHeader({
       </div>
       <div className="tour-profile-icon text-xs text-black font-mono flex items-center gap-4">
         {canAccessSettings && (
-          <button 
+          <button
             onClick={onOpenSettings}
             className="p-2 rounded-none bg-white hover:bg-white text-black hover:text-black transition-colors"
             title="Project Settings"
@@ -48,6 +48,12 @@ export default function ProjectHeader({
             <Settings size={20} />
           </button>
         )}
+        <button 
+          onClick={() => window.print()}
+          className="font-mono flex items-center gap-2 bg-white text-black border flex-1 md:flex-none border-2 border-black px-4 py-2 font-bold uppercase hover:bg-black hover:text-white transition-colors"
+        >
+          <Printer size={16} /> <span className="hidden md:inline">Export PDF</span>
+        </button>
         <UserProfile user={user} onOpenProfile={onNavigateProfile} />
       </div>
     </header>

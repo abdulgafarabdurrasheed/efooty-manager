@@ -5,7 +5,7 @@ import { LoginButton } from './components/AuthComponents';
 import { useTournamentData } from './hooks/useTournamentData';
 import { useTournamentActions } from './hooks/useTournamentActions';
 import { useToast } from './hooks/useToast';
-
+import PrintableReport from './components/PrintableReport';
 import TournamentHeader from './components/TournamentHeader';
 import TabNavigation from './components/TabNavigation';
 import HighlightsSection from './components/HighlightsSection';
@@ -151,185 +151,188 @@ export default function ProjectView() {
   }
 
   return (
-    <div className="font-mono min-h-screen bg-white text-black font-sans selection:bg-black  pb-20">
-      <div className="font-mono fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-black -z-10"></div>
+    <>
+      <PrintableReport project={project} players={players} highlights={highlights} />
+      <div className="font-mono min-h-screen bg-white text-black font-sans selection:bg-black pb-20 no-print">
+        <div className="font-mono fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-black -z-10"></div>
 
-      <div className="font-mono max-w-7xl mx-auto p-4 md:p-8 space-y-8">
-        
-        <TournamentHeader 
-          project={project}
-          user={user}
-          onCopyLink={actions.handleCopyLink}
-          onOpenSettings={() => setShowSettings(true)}
-          onNavigateProfile={() => navigate('/profile')}
-        />
-
-        {project.status === 'ended' && (
-          <div className="font-mono bg-black text-white border-2 border-black hover:bg-white hover:text-black border border-2 border-black rounded-none p-4 flex items-center justify-center gap-3 text-black font-bold uppercase tracking-wider animate-in fade-in slide-in-from-top-4">
-            <Shield size={24} /> Season Ended • Read Only Mode
-          </div>
-        )}
-
-        <TabNavigation 
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          project={project}
-          players={players}
-          user={user}
-        />
-        {activeTab === 'pipeline' ? (
-          <SprintPipeline project={project} user={user} />
-        ) : activeTab === 'oracle' ? (
-          <AIOracle project={project} projectName={project.name} directors={players} squadPlayers={squadPlayers} matches={matches} />
-        ) : activeTab === 'squad' ? (
-          <SquadViewer user={user} onSyncSquad={actions.handleSyncSquad} isEnded={project.status === 'ended'} />
-        ) : activeTab === 'analytics' ? (
-          <AnalyticsView matches={matches} players={players} squadPlayers={squadPlayers} user={user} />
-        ) : activeTab === 'fixtures' ? (
-          <div id="log-match-form" className="font-mono scroll-mt-24">
-            <FixturesList 
-              projectId={projectId} 
-              matches={matches}
-              isAdmin={isOwner || isAdmin}
-              onMatchClick={handleMatchClick}
-            />
-          </div>
-        ) : activeTab === 'bracket' ? (
-          <BracketView 
-            projectId={projectId} 
-            isAdmin={isOwner || isAdmin} 
-            directors={players} 
-            onTeamClick={(directorId) => {
-              const director = players.find(p => p.id === directorId);
-              if (director) setSelectedPlayer(director);
-            }}
-            projectFormat={project.format}
-            maxTeams={project.maxTeams}
-            projectSettings={project.settings}
-            startDate={project.startDate}
-            endDate={project.endDate}
-            squadPlayers={squadPlayers}
-            onFinalizeMatch={handleFinalizeMatch}
+        <div className="font-mono max-w-7xl mx-auto p-4 md:p-8 space-y-8">
+          
+          <TournamentHeader 
+            project={project}
+            user={user}
+            onCopyLink={actions.handleCopyLink}
+            onOpenSettings={() => setShowSettings(true)}
+            onNavigateProfile={() => navigate('/profile')}
           />
-        ) : (
-          <>
-            <HighlightsSection highlights={highlights} activeTab={activeTab} />
 
-            {activeTab === 'directors' ? (
-              <ManagersDashboard 
-                project={project}
-                user={user}
-                players={players}
-                leaderboard={leaderboard}
-                recentReviews={recentReviews}
+          {project.status === 'ended' && (
+            <div className="font-mono bg-black text-white border-2 border-black hover:bg-white hover:text-black border border-2 border-black rounded-none p-4 flex items-center justify-center gap-3 text-black font-bold uppercase tracking-wider animate-in fade-in slide-in-from-top-4">
+              <Shield size={24} /> Season Ended • Read Only Mode
+            </div>
+          )}
+
+          <TabNavigation 
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            project={project}
+            players={players}
+            user={user}
+          />
+          {activeTab === 'pipeline' ? (
+            <SprintPipeline project={project} user={user} />
+          ) : activeTab === 'oracle' ? (
+            <AIOracle project={project} projectName={project.name} directors={players} squadPlayers={squadPlayers} matches={matches} />
+          ) : activeTab === 'squad' ? (
+            <SquadViewer user={user} onSyncSquad={actions.handleSyncSquad} isEnded={project.status === 'ended'} />
+          ) : activeTab === 'analytics' ? (
+            <AnalyticsView matches={matches} players={players} squadPlayers={squadPlayers} user={user} />
+          ) : activeTab === 'fixtures' ? (
+            <div id="log-match-form" className="font-mono scroll-mt-24">
+              <FixturesList 
+                projectId={projectId} 
                 matches={matches}
-                onAddPlayer={actions.handleAddPlayer}
-                onStartProject={actions.handleStartProject}
-                onPlayerClick={setSelectedPlayer}
-                onViewFormation={setViewFormationId}
-                onOpenAdminModal={openAdminModal}
-                onRemoveDirector={actions.handleRemoveDirector}
-                setActiveTab={setActiveTab}
+                isAdmin={isOwner || isAdmin}
+                onMatchClick={handleMatchClick}
               />
-            ) : (
-              <PlayerStatsView 
-                squadPlayers={squadPlayers}
-                user={user}
-                project={project}
-                matches={matches}
-                getDirectorInfo={getDirectorInfo}
-                updateSquadStat={actions.updateSquadStat}
-              />
-            )}
-          </>
-        )}
-      </div>
-
-      {pendingMatch && (
-        <GoalAssignmentModal 
-          matchData={pendingMatch} 
-          homeSquad={squadPlayers.filter(p => String(p.directorId) === String(pendingMatch.homeId))}
-          awaySquad={squadPlayers.filter(p => String(p.directorId) === String(pendingMatch.awayId))}
-          onConfirm={(assignments) => handleFinalizeMatch(null, assignments)}
-          onSkip={() => handleFinalizeMatch(null, {})}
-          onCancel={() => setPendingMatch(null)} 
-        />
-      )}
-
-      <AdminConfirmationModal 
-        isOpen={adminModal.isOpen}
-        name={adminModal.name}
-        isAdmin={adminModal.isAdmin}
-        onConfirm={() => actions.executeToggleAdmin(adminModal, setAdminModal)}
-        onCancel={() => setAdminModal({ ...adminModal, isOpen: false })}
-      />
-
-      {(isOwner || isAdmin) && (
-        <div className="font-mono tour-fab fixed bottom-6 right-6 z-40 md:hidden">
-          {project.status === 'ACTIVE' && (
-            <button  
-              onClick={() => {
-                setActiveTab('fixtures');
-                setTimeout(() => document.getElementById('log-match-form')?.scrollIntoView({ behavior: 'smooth' }), 100);
+            </div>
+          ) : activeTab === 'bracket' ? (
+            <BracketView 
+              projectId={projectId} 
+              isAdmin={isOwner || isAdmin} 
+              directors={players} 
+              onTeamClick={(directorId) => {
+                const director = players.find(p => p.id === directorId);
+                if (director) setSelectedPlayer(director);
               }}
-              className="font-mono bg-green-600 text-black p-4 rounded-none shadow-none shadow-none/50 flex items-center justify-center animate-bounce-slow"
-            >
-              <Plus size={28} />
-            </button>
+              projectFormat={project.format}
+              maxTeams={project.maxTeams}
+              projectSettings={project.settings}
+              startDate={project.startDate}
+              endDate={project.endDate}
+              squadPlayers={squadPlayers}
+              onFinalizeMatch={handleFinalizeMatch}
+            />
+          ) : (
+            <>
+              <HighlightsSection highlights={highlights} activeTab={activeTab} />
+
+              {activeTab === 'directors' ? (
+                <ManagersDashboard 
+                  project={project}
+                  user={user}
+                  players={players}
+                  leaderboard={leaderboard}
+                  recentReviews={recentReviews}
+                  matches={matches}
+                  onAddPlayer={actions.handleAddPlayer}
+                  onStartProject={actions.handleStartProject}
+                  onPlayerClick={setSelectedPlayer}
+                  onViewFormation={setViewFormationId}
+                  onOpenAdminModal={openAdminModal}
+                  onRemoveDirector={actions.handleRemoveDirector}
+                  setActiveTab={setActiveTab}
+                />
+              ) : (
+                <PlayerStatsView 
+                  squadPlayers={squadPlayers}
+                  user={user}
+                  project={project}
+                  matches={matches}
+                  getDirectorInfo={getDirectorInfo}
+                  updateSquadStat={actions.updateSquadStat}
+                />
+              )}
+            </>
           )}
         </div>
-      )}
 
-      <SettingsModal 
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
-        onEnd={() => { setShowSettings(false); setShowEndModal(true); }}
-        onDelete={() => { setShowSettings(false); setShowDeleteModal(true); }}
-        onLeave={() => { setShowSettings(false); actions.handleLeaveProject(); }}
-        isOwner={isOwner}
-        canLeave={project.participants?.includes(user?.uid)}
-        inviteCode={project.inviteCode}
-      />
+        {pendingMatch && (
+          <GoalAssignmentModal 
+            matchData={pendingMatch} 
+            homeSquad={squadPlayers.filter(p => String(p.directorId) === String(pendingMatch.homeId))}
+            awaySquad={squadPlayers.filter(p => String(p.directorId) === String(pendingMatch.awayId))}
+            onConfirm={(assignments) => handleFinalizeMatch(null, assignments)}
+            onSkip={() => handleFinalizeMatch(null, {})}
+            onCancel={() => setPendingMatch(null)} 
+          />
+        )}
 
-      <DeleteTournamentModal 
-        isOpen={showDeleteModal}
-        projectName={project.name}
-        onConfirm={actions.handleDeleteProject}
-        onCancel={() => setShowDeleteModal(false)}
-      />
-
-      <ScoreEntryModal 
-        isOpen={scoreModalOpen} 
-        match={selectedMatchForLogging} 
-        matches={matches}
-        onClose={() => setScoreModalOpen(false)} 
-        onConfirm={handleScoreConfirm} 
-      />
-
-      <EndTournamentModal 
-        isOpen={showEndModal}
-        onConfirm={handleEndProject}
-        onCancel={() => setShowEndModal(false)}
-      />
-
-      {selectedPlayer && (
-        <PlayerCard 
-          player={selectedPlayer} 
-          currentUser={user}
-          matches={matches}
-          onClose={() => setSelectedPlayer(null)} 
+        <AdminConfirmationModal 
+          isOpen={adminModal.isOpen}
+          name={adminModal.name}
+          isAdmin={adminModal.isAdmin}
+          onConfirm={() => actions.executeToggleAdmin(adminModal, setAdminModal)}
+          onCancel={() => setAdminModal({ ...adminModal, isOpen: false })}
         />
-      )}
 
-      <ViewFormationModal 
-        viewFormationId={viewFormationId}
-        players={players}
-        onClose={() => setViewFormationId(null)}
-      />
-      
-      <OnboardingTour isAdmin={isOwner || isAdmin} />
-      
-      {toasts.map(t => <Toast key={t.id} message={t.message} type={t.type} onClose={() => removeToast(t.id)} />)}
-    </div>
+        {(isOwner || isAdmin) && (
+          <div className="font-mono tour-fab fixed bottom-6 right-6 z-40 md:hidden">
+            {project.status === 'ACTIVE' && (
+              <button  
+                onClick={() => {
+                  setActiveTab('fixtures');
+                  setTimeout(() => document.getElementById('log-match-form')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                }}
+                className="font-mono bg-green-600 text-black p-4 rounded-none shadow-none shadow-none/50 flex items-center justify-center animate-bounce-slow"
+              >
+                <Plus size={28} />
+              </button>
+            )}
+          </div>
+        )}
+
+        <SettingsModal 
+          isOpen={showSettings}
+          onClose={() => setShowSettings(false)}
+          onEnd={() => { setShowSettings(false); setShowEndModal(true); }}
+          onDelete={() => { setShowSettings(false); setShowDeleteModal(true); }}
+          onLeave={() => { setShowSettings(false); actions.handleLeaveProject(); }}
+          isOwner={isOwner}
+          canLeave={project.participants?.includes(user?.uid)}
+          inviteCode={project.inviteCode}
+        />
+
+        <DeleteTournamentModal 
+          isOpen={showDeleteModal}
+          projectName={project.name}
+          onConfirm={actions.handleDeleteProject}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+
+        <ScoreEntryModal 
+          isOpen={scoreModalOpen} 
+          match={selectedMatchForLogging} 
+          matches={matches}
+          onClose={() => setScoreModalOpen(false)} 
+          onConfirm={handleScoreConfirm} 
+        />
+
+        <EndTournamentModal 
+          isOpen={showEndModal}
+          onConfirm={handleEndProject}
+          onCancel={() => setShowEndModal(false)}
+        />
+
+        {selectedPlayer && (
+          <PlayerCard 
+            player={selectedPlayer} 
+            currentUser={user}
+            matches={matches}
+            onClose={() => setSelectedPlayer(null)} 
+          />
+        )}
+
+        <ViewFormationModal 
+          viewFormationId={viewFormationId}
+          players={players}
+          onClose={() => setViewFormationId(null)}
+        />
+        
+        <OnboardingTour isAdmin={isOwner || isAdmin} />
+        
+        {toasts.map(t => <Toast key={t.id} message={t.message} type={t.type} onClose={() => removeToast(t.id)} />)}
+      </div>
+    </>
   );
 }
