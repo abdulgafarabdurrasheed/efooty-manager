@@ -5,6 +5,7 @@ import RecentActivity from './RecentActivity';
 import JoinLeagueButton from './JoinLeagueButton';
 import PipModal from './PipModal';
 import StandupFeed from './StandupFeed';
+import SynergyBurndownMatrix from './SynergyBurndownMatrix';
 
 
 export default function ManagersDashboard({ 
@@ -93,17 +94,20 @@ export default function ManagersDashboard({
                   onOpenAdminModal={onOpenAdminModal}
                   onRemoveDirector={onRemoveDirector}
                 />
-              : <LeagueTable 
-                  tablePlayers={leaderboard}
-                  user={user}
-                  project={project}
-                  matches={matches}
-                  onPlayerClick={onPlayerClick}
-                  onViewFormation={onViewFormation}
-                  onOpenAdminModal={onOpenAdminModal}
-                  onRemoveDirector={onRemoveDirector}
-                  onPipClick={setSelectedPipPlayer}
-                />
+              : <div className="font-mono mb-8 animate-in fade-in slide-in-from-bottom-8 duration-500 delay-150">
+                  <SynergyBurndownMatrix matches={matches} /> 
+                  <LeagueTable 
+                    tablePlayers={leaderboard}
+                    user={user}
+                    project={project}
+                    matches={matches}
+                    onPlayerClick={onPlayerClick}
+                    onViewFormation={onViewFormation}
+                    onOpenAdminModal={onOpenAdminModal}
+                    onRemoveDirector={onRemoveDirector}
+                    onPipClick={setSelectedPipPlayer}
+                  />
+                </div>
           )}
         </div>
       </div>

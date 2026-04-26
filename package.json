@@ -19,7 +19,7 @@
     "react-dom": "^19.2.0",
     "react-joyride": "^2.9.3",
     "react-router-dom": "^7.11.0",
-    "recharts": "^3.6.0",
+    "recharts": "^3.8.1",
     "uuid": "^14.0.0"
   },
   "devDependencies": {
