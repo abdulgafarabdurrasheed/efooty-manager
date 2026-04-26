@@ -6,6 +6,7 @@ import JoinLeagueButton from './JoinLeagueButton';
 import PipModal from './PipModal';
 import StandupFeed from './StandupFeed';
 import SynergyBurndownMatrix from './SynergyBurndownMatrix';
+import ChaosMonkeyModal from './ChaosMonkeyModal';
 
 
 export default function ManagersDashboard({ 
@@ -30,6 +31,7 @@ export default function ManagersDashboard({
   const isKnockout = project?.format === 'KNOCKOUT';
   const isHybridMultiGroup = project?.format === 'HYBRID' && project?.settings?.hybridConfig?.type === 'MULTI_GROUP';
   const [selectedPipPlayer, setSelectedPipPlayer] = useState(null);
+  const [isChaosOpen, setIsChaosOpen] = useState(false);
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 pb-20">
@@ -69,6 +71,19 @@ export default function ManagersDashboard({
               {isKnockout ? 'Project Bracket' : 'Live Leaderboard'}
             </h2>
             <span className="px-3 py-1 rounded-none bg-white text-black text-xs font-mono border border-2 border-black">SEASON 1</span>
+          </div>
+
+          <div className="mb-8 p-4 bg-red-100 border-4 border-red-500 shadow-[8px_8px_0px_0px_rgba(239,68,68,1)] flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-black text-red-600 uppercase tracking-tighter">⚠️ Executive Override</h3>
+              <p className="text-sm font-bold text-black uppercase">Automated Resource Liquidator</p>
+            </div>
+            <button 
+              onClick={() => setIsChaosOpen(true)}
+              className="bg-red-600 text-white font-black text-lg py-3 px-8 uppercase tracking-widest border-4 border-black hover:bg-black hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+            >
+              Optimize Resources
+            </button>
           </div>
           
           {isKnockout ? (
@@ -141,6 +156,11 @@ export default function ManagersDashboard({
           onClose={() => setSelectedPipPlayer(null)} 
         />
       )}
+      <ChaosMonkeyModal
+        isOpen={isChaosOpen}
+        onClose={() => setIsChaosOpen(false)}
+        projectId={project.id}
+      />
     </div>
   );
 }
