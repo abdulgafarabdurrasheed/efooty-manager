@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Briefcase, Star } from 'lucide-react';
 import { getH2HStats } from '../utils/analytics';
+import CorporateReviewModal from './CorporateReviewModal';
 
 const PlayerCard = ({ player, onClose, employeeName, currentUser, matches = [] }) => {
   const isEmployee = player ? (player.department !== undefined || player.employeeId === undefined) : false;
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   
   const h2h = React.useMemo(() => {
       if (!currentUser || !player || !isEmployee) return null;
@@ -122,6 +124,19 @@ const PlayerCard = ({ player, onClose, employeeName, currentUser, matches = [] }
                  </>
                )}
             </div>
+
+            <button
+              onClick={() => setIsReviewOpen(true)}
+              className='w-full mt-4 border-2 border-black py-2 bg-yellow-300 text-black font-black uppercase text-xs hover:bg-black hover:text-white transition-colors'
+            >
+              Conduct Performance Review
+            </button>
+
+                <CorporateReviewModal 
+                  isOpen={isReviewOpen} 
+                  onClose={() => setIsReviewOpen(false)} 
+                  resource={player} 
+                />
 
             {h2h && (
                 <div className="font-mono px-8 pb-6 z-10 w-full mt-auto">

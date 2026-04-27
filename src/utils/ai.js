@@ -164,3 +164,29 @@ export const getProjectInsight = async (question, contextData) => {
         return "The supercomputer is overheating. Give me a moment to cool down.";
     }
 };
+
+export const generateCorporateReview = async (resource) => {
+    const prompt = `
+    Act as a toxic, passive-aggressive corporate middle manager. 
+    You are writing a mandatory quarterly performance review for an "associate" named "${resource.name}".
+    
+    Here are their stats:
+    - Yields Delivered (Goals): ${resource.goals || 0}
+    - Assist Metrics (Assists): ${resource.assists || 0}
+    - Total Sprints Participated (Matches Played): ${resource.matchesPlayed || 0}
+    - Sprint Win Rate: ${resource.matchesPlayed > 0 ? Math.round((resource.wins / resource.matchesPlayed) * 100) : 0}%
+    
+    Write a single, highly corporate, passive-aggressive paragraph (max 3 sentences) reviewing their performance without explicitly insulting them. Use terrible buzzwords (synergy, bandwidth, pivot, action item, circle back).
+    
+    Format the response as plain text only. Do not use quotes or markdown.
+    `;
+
+    try {
+        const result = await generateContentSafe(prompt);
+        const response = await result.response;
+        return response.text().trim();
+    } catch (error) {
+        console.error("Performance Review AI Failed:", error);
+        return "ERROR 404: Synergistic review algorithms offline. Associate is presumed adequate.";
+    }
+};
