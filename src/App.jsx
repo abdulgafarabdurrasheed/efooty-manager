@@ -10,6 +10,7 @@ import ProfileView from './ProfileView';
 import TournamentWizard from './TournamentWizard';
 import NotFound from './components/NotFound';
 import InteractiveDemo from './components/InteractiveDemo';
+import RTOTracker from './components/RTOTracker';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="font-mono min-h-screen bg-white text-black font-mono selection:bg-black selection:text-white ">
+        <RTOTracker />
         <header className="font-mono bg-white  border-b border-2 border-black sticky top-0 z-40">
           <div className="font-mono max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div className="font-mono flex items-center gap-3">
