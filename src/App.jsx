@@ -11,6 +11,7 @@ import TournamentWizard from './TournamentWizard';
 import NotFound from './components/NotFound';
 import InteractiveDemo from './components/InteractiveDemo';
 import RTOTracker from './components/RTOTracker';
+import ProductivityEnforcer from './components/ProduvtivityEnforcer';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -43,7 +44,8 @@ export default function App() {
     <BrowserRouter>
       <div className="font-mono min-h-screen bg-white text-black font-mono selection:bg-black selection:text-white ">
         <RTOTracker />
-        <header className="font-mono bg-white  border-b border-2 border-black sticky top-0 z-40">
+        <ProductivityEnforcer />
+        <header className="pt-16 font-mono bg-white  border-b border-2 border-black sticky top-0 z-40">
           <div className="font-mono max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div className="font-mono flex items-center gap-3">
               <div className="font-mono bg-gradient-to-br from-yellow-400 to-orange-600 p-2 rounded-none text-black shadow-none shadow-none/20">
@@ -58,7 +60,7 @@ export default function App() {
               {user ? <UserProfile user={user} /> : <LoginButton />}
             </div>
           </div>
-        </header>
+        </header> Okay, 10:30 PM, let's get this bread. 
 
         <main>
           {!user ? (
