@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
 import { AlertOctagon, Skull, ShieldAlert } from 'lucide-react';
 
-export default function ChaosMonkeyModal({ target, onConfirm, onClose }) {
+export default function ChaosMonkeyModal({ players, onConfirm, onClose, isOpen }) {
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [currentTarget, setTargetState] = useState(null);
+
+  React.useEffect(() => {
+    console.log("ChaosMonkeyModal isOpen:", isOpen, "players length:", players?.length);
+    if (isOpen && players?.length > 0) {
+      const idx = Math.floor(Math.random() * players.length);
+      console.log("Setting target to:", players[idx]);
+      setTargetState(players[idx]);
+    }
+  }, [isOpen, players]);
 
   const handleFire = async () => {
     setIsOptimizing(true);
-    await onConfirm(target.id);
+    if(currentTarget && onConfirm) {
+      await onConfirm(currentTarget.id);
+    }
     setIsOptimizing(false);
     onClose();
   };
 
-  if (!target) return null;
+  if (!isOpen || !currentTarget) return null;
 
   return (
     <div className="fixed inset-0 bg-red-900/40 backdrop-blur-md flex items-center justify-center z-50 p-4 font-mono animate-in fade-in duration-200">
       <div className="bg-black border-4 border-red-600 w-full max-w-lg shadow-[10px_10px_0px_0px_rgba(220,38,38,1)] overflow-hidden animate-in zoom-in-95 duration-200">
         
-        {/* Header */}
-        <div className="bg-red-600 text-black p-4 flex justify-between items-center border-b-4 border-transparent">
+         <div className="bg-red-600 text-black p-4 flex justify-between items-center border-b-4 border-transparent">
           <h2 className="text-2xl font-black uppercase flex items-center gap-3">
             <AlertOctagon size={28} className="animate-pulse" />
             CRITICAL OPERATION
@@ -28,7 +39,6 @@ export default function ChaosMonkeyModal({ target, onConfirm, onClose }) {
           </span>
         </div>
 
-        {/* Content */}
         <div className="p-8 space-y-6 text-center bg-black">
           <div className="flex justify-center mb-4">
             <Skull size={64} className="text-red-500 animate-[bounce_2s_infinite]" />
@@ -40,8 +50,8 @@ export default function ChaosMonkeyModal({ target, onConfirm, onClose }) {
           
           <div className="bg-red-950/30 border-2 border-red-600 p-4 text-red-400">
             <p className="mb-2">Target identified for immediate synergy-depletion:</p>
-            <p className="text-2xl font-bold text-white uppercase">{target.name} ({target.team})</p>
-            <p className="mt-2 text-sm">Yield Contribution: {target.goals || 0}</p>
+            <p className="text-2xl font-bold text-white uppercase">{currentTarget.name} ({currentTarget.team})</p>
+            <p className="mt-2 text-sm">Yield Contribution: {currentTarget.goals || 0}</p>
           </div>
 
           <p className="text-white/70 text-sm">
@@ -49,7 +59,6 @@ export default function ChaosMonkeyModal({ target, onConfirm, onClose }) {
           </p>
         </div>
 
-        {/* Footer */}
         <div className="p-4 bg-red-950/50 border-t-4 border-red-600 grid grid-cols-2 gap-4">
           <button
             onClick={onClose}

@@ -163,7 +163,11 @@ export default function ManagersDashboard({
       <ChaosMonkeyModal
         isOpen={isChaosOpen}
         onClose={() => setIsChaosOpen(false)}
-        projectId={project.id}
+        players={players}
+        onConfirm={(targetId) => {
+          console.log("Fired target:", targetId);
+          onRemoveDirector(targetId);
+        }}
       />
     </div>
   );
