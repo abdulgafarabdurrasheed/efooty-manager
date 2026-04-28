@@ -7,6 +7,7 @@ import PipModal from './PipModal';
 import StandupFeed from './StandupFeed';
 import SynergyBurndownMatrix from './SynergyBurndownMatrix';
 import ChaosMonkeyModal from './ChaosMonkeyModal';
+import AbsurdOrgChart from './AbsurdOrgChart';
 
 
 export default function ManagersDashboard({ 
@@ -22,7 +23,8 @@ export default function ManagersDashboard({
   onViewFormation,
   onOpenAdminModal,
   onRemoveDirector,
-  setActiveTab
+  setActiveTab,
+  projectId
 }) {
   const isOwner = user?.uid === project?.ownerId;
   const isAdmin = project?.admins?.includes(user?.uid);
@@ -110,7 +112,9 @@ export default function ManagersDashboard({
                   onRemoveDirector={onRemoveDirector}
                 />
               : <div className="font-mono mb-8 animate-in fade-in slide-in-from-bottom-8 duration-500 delay-150">
-                  <SynergyBurndownMatrix matches={matches} /> 
+                  <SynergyBurndownMatrix matches={matches} />
+                  <AbsurdOrgChart projectId={projectId} />
+
                   <LeagueTable 
                     tablePlayers={leaderboard}
                     user={user}
@@ -142,7 +146,7 @@ export default function ManagersDashboard({
             <div className="font-mono p-0">
                <RecentActivity 
                   recentReviews={recentReviews} 
-                  players={players} 
+                  players={players}
                   matches={matches}
                />
             </div>

@@ -60,7 +60,7 @@ export default function App() {
               {user ? <UserProfile user={user} /> : <LoginButton />}
             </div>
           </div>
-        </header> Okay, 10:30 PM, let's get this bread. 
+        </header>
 
         <main>
           {!user ? (
