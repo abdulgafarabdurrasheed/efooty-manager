@@ -37,10 +37,10 @@ export default function InteractiveDemo({ onComplete }) {
   };
 
   return (
-    <div className="font-mono absolute inset-0 z-50 bg-[#000] text-white flex flex-col items-center justify-center p-6">      <button 
+    <div className="font-mono fixed inset-0 z-50 bg-[#000] text-white flex flex-col items-center justify-center p-6">
+      <button
         onClick={onComplete}
-        className="absolute top-6 right-6 text-white hover:text-red-400 flex items-center gap-2 text-sm font-bold uppercase tracking-widest"
-      >
+        className="absolute top-6 right-6 text-white hover:text-red-400 flex items-center gap-2 text-sm font-bold uppercase tracking-widest">
         Skip Tutorial <X size={16} />
       </button>
 

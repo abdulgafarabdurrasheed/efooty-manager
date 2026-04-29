@@ -33,13 +33,11 @@ export default function CorporateGuide({ user }) {
   const [tutorialKey, setTutorialKey] = useState(null);
 
   useEffect(() => {
-    // 1. Never show on the login (welcome) screen
     if (!user && location.pathname === '/') {
       setIsVisible(false);
       return;
     }
 
-    // 2. Identify which tutorial to load based on path
     let key = null;
     if (location.pathname === '/') {
       key = 'dashboard';
@@ -58,7 +56,6 @@ export default function CorporateGuide({ user }) {
       return;
     }
 
-    // 3. Check if they have already seen it (tracked per user, or 'guest' for demo)
     const userId = user ? user.uid : 'guest';
     const storageKey = `efooty_tutorial_${userId}_${key}`;
     const hasSeen = localStorage.getItem(storageKey);
@@ -72,7 +69,33 @@ export default function CorporateGuide({ user }) {
     }
   }, [location.pathname, user]);
 
-  if (!isVisible || !tutorialKey || !TUTORIAL_STEPS[tutorialKey]) return null;
+  if (!tutorialKey || !TUTORIAL_STEPS[tutorialKey]) return null;
+
+  if (!isVisible) {
+    return (
+      <button
+        onClick={() => {
+          const key = tutorialKey || (() => {
+            if (location.pathname === '/') return 'dashboard';
+            if (location.pathname === '/create') return 'create';
+            if (location.pathname === '/profile') return 'profile';
+            if (location.pathname === '/project/demo-project') return 'demo-project';
+            if (location.pathname.startsWith('/project/')) return 'project';
+            return null;
+          })();
+          if (key && TUTORIAL_STEPS[key]) {
+            setTutorialKey(key);
+            setCurrentStep(0);
+            setIsVisible(true);
+          }
+        }}
+        className="fixed bottom-6 right-6 z-[999] w-12 h-12 bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-xl hover:bg-black hover:text-yellow-400 transition-colors cursor-pointer"
+        title="Reopen Synergy Guide"
+      >
+        ?
+      </button>
+    );
+  };
 
   const steps = TUTORIAL_STEPS[tutorialKey];
   const currentTutorial = steps[currentStep];
