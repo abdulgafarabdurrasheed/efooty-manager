@@ -8,6 +8,7 @@ import {
   orderBy
 } from "firebase/firestore";
 import { auth, db } from '../firebase';
+import { DEMO_PROJECT, DEMO_PLAYERS, DEMO_MATCHES, DEMO_SQUAD, DEMO_RECENT } from '../data/demoData';
 
 const getPoints = (player) => (player.wins * 3) + (player.draws * 1);
 
@@ -29,7 +30,16 @@ export function useTournamentData(projectId) {
   }, []);
 
   useEffect(() => {
-    if (!user || !projectId) return;
+    if (projectId !== 'demo-project') return;
+    setProject(DEMO_PROJECT)
+    setPlayers(DEMO_PLAYERS)
+    setSquadPlayers(DEMO_SQUAD)
+    setRecentReviews(DEMO_RECENT)
+    setReviews(DEMO_MATCHES)
+  }, [projectId])
+
+  useEffect(() => {
+    if (!user || !projectId || projectId === 'demo-project') return;
 
     const projectRef = doc(db, "projects", projectId);
     const unsubProject = onSnapshot(projectRef, (docSnap) => {
