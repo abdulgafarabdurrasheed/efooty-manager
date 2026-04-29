@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const IDLE_TIMEOUT_MS = 6000;
+const IDLE_TIMEOUT_MS = 20000;
 const DECAY_INTERVAL_MS = 60;
 
 export default function ProductivityEnforcer() {
@@ -48,7 +48,7 @@ export default function ProductivityEnforcer() {
 
   const handleConfessionChange = (e) => {
     setConfession(e.target.value);
-    if (e.target.value === "I am a dedicated synergy-multiplier") {
+    if (e.target.value === "I AM WORKING") {
       setIsLocked(false);
       setProductivityLevel(100);
       setConfession('');
@@ -86,7 +86,7 @@ export default function ProductivityEnforcer() {
                   Type the following exactly to unlock:
                 </label>
                 <div className="bg-yellow-200 border-2 border-black p-4 font-mono font-bold text-center text-lg mb-4 select-none">
-                  I am a dedicated synergy-multiplier
+                  I AM WORKING
                 </div>
                 
                 <input

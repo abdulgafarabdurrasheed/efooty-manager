@@ -49,7 +49,7 @@ export default function CorporateGuide() {
   const currentTutorial = steps[currentStep];
 
   return (
-    <div className="fixed bottom-6 right-6 z-[999] w-80 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-bounce font-sans">
+    <div className="fixed bottom-6 right-6 z-[999] w-80 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-sans">
       <div className="bg-yellow-400 border-b-4 border-black p-2 flex justify-between items-center">
         <span className="font-black uppercase tracking-tighter text-sm flex items-center gap-2">
           <span>🤖</span>
