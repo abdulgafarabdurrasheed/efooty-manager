@@ -2,66 +2,116 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const TUTORIAL_STEPS = {
-  '/': [
-    { text: "Welcome to your centralized E.F.O.O.T.Y. Director Dashboard.", highlight: false },
-    { text: "Here you can track active initiatives or deploy a new corporate project. Click 'Create Project' when you're ready to synergize.", highlight: true },
-    { text: "If you're just looking around, you can click 'Explore Demo Project' on the login screen to see a pre-populated Synergy Matrix.", highlight: false }
+  'dashboard': [
+    { text: "Welcome to your centralized E.F.O.O.T.Y. Director Dashboard. All executive readouts exist here.", highlight: false },
+    { text: "Track active initiatives or deploy a new corporate project. Click 'Create Project' when you're ready to synergize.", highlight: true },
   ],
-  '/project/demo-project': [
-    { text: "You are currently viewing a READ-ONLY Demo Project. You cannot make permanent edits, but you can explore the pipeline.", highlight: false },
-    { text: "This is the Managers Dashboard. Here you track KPIs, Sprints, and active yields for all participants.", highlight: false },
-    { text: "Try navigating through the tabs above: View the Sprint Pipeline, check Analytics, or see the Corporate Hierarchy.", highlight: true },
-    { text: "Normally, Executive Directors can add resources or trigger Sprints here. Give it a shot, but authorization will be denied.", highlight: false }
+  'create': [
+    { text: "This is the Initiative Creation Wizard. Prepare to launch a new synergy framework.", highlight: false },
+    { text: "Set parameters, define your KPI format, and allocate resources efficiently.", highlight: true }
+  ],
+  'profile': [
+    { text: "Your executive matrix awaits. This is your personal clearance data.", highlight: false },
+    { text: "Review your system logs and total generated yield metrics across all projects here.", highlight: true }
+  ],
+  'project': [
+    { text: "Welcome to the Project Control Center. This dashboard controls Sprints, Pipelines, and Analytics.", highlight: false },
+    { text: "Navigate the tabs to view Resource Rosters, the Sprint Kanban, or Corporate Hierarchies.", highlight: true },
+    { text: "Warning: Only authorized executives can enforce sprints or liquidate underperforming resources.", highlight: false }
+  ],
+  'demo-project': [
+    { text: "You are currently viewing a READ-ONLY Demo Project via guest access.", highlight: false },
+    { text: "You cannot make permanent edits, but you can explore the pipeline and check our analytics.", highlight: true },
+    { text: "Click around! But any attempt to trigger executive actions will prompt a security warning.", highlight: false }
   ]
 };
 
-export default function CorporateGuide() {
+export default function CorporateGuide({ user }) {
   const location = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-
-  let steps = [];
-  if (location.pathname === '/') {
-    steps = TUTORIAL_STEPS['/'];
-  } else if (location.pathname.startsWith('/project/')) {
-    steps = TUTORIAL_STEPS['/project/demo-project']; 
-  }
+  const [tutorialKey, setTutorialKey] = useState(null);
 
   useEffect(() => {
-    if (steps && steps.length > 0) {
+    // 1. Never show on the login (welcome) screen
+    if (!user && location.pathname === '/') {
+      setIsVisible(false);
+      return;
+    }
+
+    // 2. Identify which tutorial to load based on path
+    let key = null;
+    if (location.pathname === '/') {
+      key = 'dashboard';
+    } else if (location.pathname === '/create') {
+      key = 'create';
+    } else if (location.pathname === '/profile') {
+      key = 'profile';
+    } else if (location.pathname === '/project/demo-project') {
+      key = 'demo-project';
+    } else if (location.pathname.startsWith('/project/')) {
+      key = 'project';
+    }
+
+    if (!key) {
+      setIsVisible(false);
+      return;
+    }
+
+    // 3. Check if they have already seen it (tracked per user, or 'guest' for demo)
+    const userId = user ? user.uid : 'guest';
+    const storageKey = `efooty_tutorial_${userId}_${key}`;
+    const hasSeen = localStorage.getItem(storageKey);
+
+    if (!hasSeen) {
+      setTutorialKey(key);
       setCurrentStep(0);
       setIsVisible(true);
     } else {
       setIsVisible(false);
     }
-  }, [location.pathname]);
+  }, [location.pathname, user]);
 
-  if (!isVisible || !steps || steps.length === 0) return null;
+  if (!isVisible || !tutorialKey || !TUTORIAL_STEPS[tutorialKey]) return null;
+
+  const steps = TUTORIAL_STEPS[tutorialKey];
+  const currentTutorial = steps[currentStep];
+
+  const markComplete = () => {
+    const userId = user ? user.uid : 'guest';
+    localStorage.setItem(`efooty_tutorial_${userId}_${tutorialKey}`, 'true');
+    setIsVisible(false);
+  };
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(c => c + 1);
     } else {
-      setIsVisible(false);
+      markComplete();
     }
   };
-
-  const currentTutorial = steps[currentStep];
 
   return (
     <div className="fixed bottom-6 right-6 z-[999] w-80 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-sans">
       <div className="bg-yellow-400 border-b-4 border-black p-2 flex justify-between items-center">
         <span className="font-black uppercase tracking-tighter text-sm flex items-center gap-2">
-          <span>🤖</span>
+          <span>🤖</span> Synergy Guide
         </span>
-        <button onClick={() => setIsVisible(false)} className="font-bold hover:text-white hover:bg-black px-1 border-2 border-transparent">✕</button>
+        <button 
+          onClick={markComplete} 
+          className="font-bold hover:text-white hover:bg-black px-1 border-2 border-transparent transition-colors"
+        >
+          ✕
+        </button>
       </div>
       <div className="p-4">
         <p className={`text-sm ${currentTutorial.highlight ? 'font-bold bg-yellow-100 p-1' : 'text-gray-700'}`}>
           {currentTutorial.text}
         </p>
         <div className="mt-4 flex justify-between items-center">
-          <span className="text-xs font-mono text-gray-500 font-bold">Step {currentStep + 1}/{steps.length}</span>
+          <span className="text-xs font-mono text-gray-500 font-bold">
+            Step {currentStep + 1}/{steps.length}
+          </span>
           <button 
             onClick={handleNext}
             className="bg-black text-white text-xs font-black uppercase px-4 py-2 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all"
