@@ -18,7 +18,6 @@ import AIOracle from './components/AIOracle';
 import SquadViewer from './components/SquadViewer';
 import SprintPipeline from './components/SprintPipeline';
 import PlayerCard from './components/PlayerCard';
-import OnboardingTour from './components/OnboardingTour';
 import Toast from './components/Toast';
 import ViewFormationModal from './components/ViewFormationModal';
 import JoinLeagueButton from './components/JoinLeagueButton';
@@ -35,13 +34,13 @@ export default function ProjectView() {
   const navigate = useNavigate();
   const { toasts, addToast, removeToast } = useToast();
 
-  const { 
-    user, 
-    project, 
-    players, 
-    squadPlayers, 
+  const {
+    user,
+    project,
+    players,
+    squadPlayers,
     matches,
-    recentReviews, 
+    recentReviews,
     leaderboard,
     getHighlights,
     getDirectorInfo
@@ -91,7 +90,7 @@ export default function ProjectView() {
     await actions.handleEndProject(setShowEndModal, setShowSettings);
   };
 
-  if (!user) {
+  if (!user && projectId !== 'demo-project') {
     return (
       <div className="font-mono min-h-screen bg-white flex flex-col items-center justify-center text-center p-6 space-y-6">
         <Briefcase size={80} className="font-mono text-black animate-pulse" />
@@ -134,12 +133,12 @@ export default function ProjectView() {
           </p>
         </div>
         {project.registrationType === 'PUBLIC' ? (
-          <JoinLeagueButton 
-             user={user} 
-             onJoin={actions.handleAddPlayer} 
-             existingPlayers={players}
-             registrationType={project.registrationType}
-             inviteCode={project.inviteCode}
+          <JoinLeagueButton
+            user={user}
+            onJoin={actions.handleAddPlayer}
+            existingPlayers={players}
+            registrationType={project.registrationType}
+            inviteCode={project.inviteCode}
           />
         ) : (
           <div className="font-mono px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-none">
@@ -157,8 +156,8 @@ export default function ProjectView() {
         <div className="font-mono fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-black -z-10"></div>
 
         <div className="font-mono max-w-7xl mx-auto p-4 md:p-8 space-y-8">
-          
-          <TournamentHeader 
+
+          <TournamentHeader
             project={project}
             user={user}
             onCopyLink={actions.handleCopyLink}
@@ -172,7 +171,7 @@ export default function ProjectView() {
             </div>
           )}
 
-          <TabNavigation 
+          <TabNavigation
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             project={project}
@@ -189,18 +188,18 @@ export default function ProjectView() {
             <AnalyticsView matches={matches} players={players} squadPlayers={squadPlayers} user={user} />
           ) : activeTab === 'fixtures' ? (
             <div id="log-match-form" className="font-mono scroll-mt-24">
-              <FixturesList 
-                projectId={projectId} 
+              <FixturesList
+                projectId={projectId}
                 matches={matches}
                 isAdmin={isOwner || isAdmin}
                 onMatchClick={handleMatchClick}
               />
             </div>
           ) : activeTab === 'bracket' ? (
-            <BracketView 
-              projectId={projectId} 
-              isAdmin={isOwner || isAdmin} 
-              directors={players} 
+            <BracketView
+              projectId={projectId}
+              isAdmin={isOwner || isAdmin}
+              directors={players}
               onTeamClick={(directorId) => {
                 const director = players.find(p => p.id === directorId);
                 if (director) setSelectedPlayer(director);
@@ -218,7 +217,7 @@ export default function ProjectView() {
               <HighlightsSection highlights={highlights} activeTab={activeTab} />
 
               {activeTab === 'directors' ? (
-                <ManagersDashboard 
+                <ManagersDashboard
                   project={project}
                   user={user}
                   players={players}
@@ -234,7 +233,7 @@ export default function ProjectView() {
                   setActiveTab={setActiveTab}
                 />
               ) : (
-                <PlayerStatsView 
+                <PlayerStatsView
                   squadPlayers={squadPlayers}
                   user={user}
                   project={project}
@@ -248,17 +247,17 @@ export default function ProjectView() {
         </div>
 
         {pendingMatch && (
-          <GoalAssignmentModal 
-            matchData={pendingMatch} 
+          <GoalAssignmentModal
+            matchData={pendingMatch}
             homeSquad={squadPlayers.filter(p => String(p.directorId) === String(pendingMatch.homeId))}
             awaySquad={squadPlayers.filter(p => String(p.directorId) === String(pendingMatch.awayId))}
             onConfirm={(assignments) => handleFinalizeMatch(null, assignments)}
             onSkip={() => handleFinalizeMatch(null, {})}
-            onCancel={() => setPendingMatch(null)} 
+            onCancel={() => setPendingMatch(null)}
           />
         )}
 
-        <AdminConfirmationModal 
+        <AdminConfirmationModal
           isOpen={adminModal.isOpen}
           name={adminModal.name}
           isAdmin={adminModal.isAdmin}
@@ -269,7 +268,7 @@ export default function ProjectView() {
         {(isOwner || isAdmin) && (
           <div className="font-mono tour-fab fixed bottom-6 right-6 z-40 md:hidden">
             {project.status === 'ACTIVE' && (
-              <button  
+              <button
                 onClick={() => {
                   setActiveTab('fixtures');
                   setTimeout(() => document.getElementById('log-match-form')?.scrollIntoView({ behavior: 'smooth' }), 100);
@@ -282,7 +281,7 @@ export default function ProjectView() {
           </div>
         )}
 
-        <SettingsModal 
+        <SettingsModal
           isOpen={showSettings}
           onClose={() => setShowSettings(false)}
           onEnd={() => { setShowSettings(false); setShowEndModal(true); }}
@@ -293,44 +292,43 @@ export default function ProjectView() {
           inviteCode={project.inviteCode}
         />
 
-        <DeleteTournamentModal 
+        <DeleteTournamentModal
           isOpen={showDeleteModal}
           projectName={project.name}
           onConfirm={actions.handleDeleteProject}
           onCancel={() => setShowDeleteModal(false)}
         />
 
-        <ScoreEntryModal 
-          isOpen={scoreModalOpen} 
-          match={selectedMatchForLogging} 
+        <ScoreEntryModal
+          isOpen={scoreModalOpen}
+          match={selectedMatchForLogging}
           matches={matches}
-          onClose={() => setScoreModalOpen(false)} 
-          onConfirm={handleScoreConfirm} 
+          onClose={() => setScoreModalOpen(false)}
+          onConfirm={handleScoreConfirm}
         />
 
-        <EndTournamentModal 
+        <EndTournamentModal
           isOpen={showEndModal}
           onConfirm={handleEndProject}
           onCancel={() => setShowEndModal(false)}
         />
 
         {selectedPlayer && (
-          <PlayerCard 
-            player={selectedPlayer} 
+          <PlayerCard
+            player={selectedPlayer}
             currentUser={user}
             matches={matches}
-            onClose={() => setSelectedPlayer(null)} 
+            onClose={() => setSelectedPlayer(null)}
           />
         )}
 
-        <ViewFormationModal 
+        <ViewFormationModal
           viewFormationId={viewFormationId}
           players={players}
           onClose={() => setViewFormationId(null)}
         />
-        
-        <OnboardingTour isAdmin={isOwner || isAdmin} />
-        
+
+
         {toasts.map(t => <Toast key={t.id} message={t.message} type={t.type} onClose={() => removeToast(t.id)} />)}
       </div>
     </>
