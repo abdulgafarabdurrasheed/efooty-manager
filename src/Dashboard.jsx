@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, Plus, ArrowRight, Calendar, Users, Activity, Star, ChevronRight, Search, Copy, CheckCircle2, Gamepad2, Monitor, Smartphone, Tv } from 'lucide-react';
+import { Briefcase, Plus, ArrowRight, Users, Activity, Star, ChevronRight, Search, Copy, CheckCircle2, Network, Laptop } from 'lucide-react';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from './firebase';
 
@@ -64,7 +64,8 @@ export default function Dashboard({ user }) {
 
   useEffect(() => {
     if (user) {
-      fetchProjects(user.uid);
+      const unsubscribe = fetchProjects(user.uid);
+      return () => unsubscribe();
     }
   }, [user]);
 
@@ -94,8 +95,8 @@ export default function Dashboard({ user }) {
   const filteredOpenProjects = openProjects.filter(t => {
     const matchesSearch = t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           t.hostName?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGame = gameFilter === 'ALL' || t.game === gameFilter;
-    const matchesPlatform = platformFilter === 'ALL' || t.platform === platformFilter;
+    const matchesGame = departmentFilter === 'ALL' || t.game === departmentFilter;
+    const matchesPlatform = workModelFilter === 'ALL' || t.platform === workModelFilter;
     
     return matchesSearch && matchesGame && matchesPlatform;
   });

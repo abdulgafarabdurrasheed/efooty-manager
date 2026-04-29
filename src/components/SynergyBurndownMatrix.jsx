@@ -26,7 +26,7 @@ export default function SynergyBurndownMatrix({ matches }) {
         )
     }
 
-    const CustomToolTip = ({ active, payload, label }) => {
+    const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className="bg-black border-2 border-white text-white p-3 shadow-[4px_4px_0px_#000]">

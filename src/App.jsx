@@ -11,7 +11,7 @@ import TournamentWizard from './TournamentWizard';
 import NotFound from './components/NotFound';
 import InteractiveDemo from './components/InteractiveDemo';
 import RTOTracker from './components/RTOTracker';
-import ProductivityEnforcer from './components/ProduvtivityEnforcer';
+import ProductivityEnforcer from './components/ProductivityEnforcer';
 import CorporateGuide from './components/CorporateGuide';
 
 function WelcomeScreen({ showDemo, handleDemoComplete }) {

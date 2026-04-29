@@ -49,7 +49,6 @@ export function useTournamentActions({
 
   const handleAddPlayer = async (newPlayer, gameplan) => {
     if (isDemo()) return;
-    if (isDemo()) return
     if (!user || !projectId) return;
     try {
       const projectRef = doc(db, "projects", projectId);
@@ -94,7 +93,6 @@ export function useTournamentActions({
   };
 
   const handleSyncSquad = async (gameplan) => {
-    if (isDemo()) return;
     if (isDemo()) return;
     if (!user || !projectId || !gameplan) return;
     
@@ -172,7 +170,6 @@ export function useTournamentActions({
   };
 
   const handleScoreConfirm = async (match, hScore, aScore, setPendingMatch, setScoreModalOpen, finalizeMatch) => {
-    if (isDemo()) return;
     if (isDemo()) return;
     const matchData = {
         matchId: match.id,
@@ -703,7 +700,6 @@ export function useTournamentActions({
 
   const handleStartProject = async () => {
     if (isDemo()) return;
-    if (isDemo()) return
     if (project.format === 'HYBRID') {
         if (project.settings?.hybridConfig?.type === 'MULTI_GROUP') {
             const { numGroups, teamsPerGroup } = project.settings.hybridConfig;
@@ -840,7 +836,6 @@ export function useTournamentActions({
 
   const handleRemoveDirector = async (directorId, directorName) => {
     if (isDemo()) return;
-    if (isDemo()) return;
     if (!window.confirm(`Are you sure you want to remove ${directorName} from the project? This will delete their squad and stats.`)) return;
     
     try {
@@ -886,7 +881,6 @@ export function useTournamentActions({
 
   const handleEndProject = async (setShowEndModal, setShowSettings) => {
     if (isDemo()) return;
-    if (isDemo()) return;
     try {
       await updateDoc(doc(db, "projects", projectId), {
         status: 'ended'
@@ -900,7 +894,6 @@ export function useTournamentActions({
   };
 
   const handleDeleteProject = async () => {
-    if (isDemo()) return;
     if (isDemo()) return;
     try {
       const mgrSnap = await getDocs(collection(db, `projects/${projectId}/directors`));
