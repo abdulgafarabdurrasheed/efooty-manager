@@ -81,3 +81,16 @@ button.hover\:bg-black:hover {
   body { background: white; margin: 0; padding: 0; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 }
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-scroll {
+  animation: ticker-scroll 45s linear infinite;
+}
+
+.ticker-scroll:hover {
+  animation-play-state: paused;
+}

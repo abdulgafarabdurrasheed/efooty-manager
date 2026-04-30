@@ -21,7 +21,7 @@ import PlayerCard from './components/PlayerCard';
 import Toast from './components/Toast';
 import ViewFormationModal from './components/ViewFormationModal';
 import JoinLeagueButton from './components/JoinLeagueButton';
-
+import CorporateAlrertsTicker from './components/CorporateAlertsTicker';
 import AdminConfirmationModal from './components/AdminConfirmationModal';
 import DeleteTournamentModal from './components/DeleteTournamentModal';
 import ScoreEntryModal from './components/ScoreEntryModal';
@@ -330,6 +330,8 @@ export default function ProjectView() {
 
 
         {toasts.map(t => <Toast key={t.id} message={t.message} type={t.type} onClose={() => removeToast(t.id)} />)}
+
+        <CorporateAlertsTicker players={players} matches={matches} />
       </div>
     </>
   );

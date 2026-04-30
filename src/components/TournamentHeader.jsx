@@ -54,7 +54,7 @@ export default function ProjectHeader({
         >
           <Printer size={16} /> <span className="hidden md:inline">Export PDF</span>
         </button>
-        <UserProfile user={user} onOpenProfile={onNavigateProfile} />
+        {user ? <UserProfile user={user} onOpenProfile={onNavigateProfile} /> : <span className="font-mono text-xs font-bold text-black uppercase border-2 border-black px-3 py-2">Demo Mode</span>}
       </div>
     </header>
   );
