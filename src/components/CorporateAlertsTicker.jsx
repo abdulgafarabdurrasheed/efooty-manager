@@ -44,16 +44,15 @@ export default function CorporateAlertsTicker({ players, matches }) {
     }, [players, matches]);
 
     const tickerText = alerts.join('   ///   ');
+    return (
+        <div className="fixed bottom-0 left-0 right-0 z-[900] bg-black border-t-4 border-yellow-400 overflow-hidden h-10 flex items-center">
+            <div className="flex items-center gap-2 bg-yellow-400 text-black px-3 h-full font-black text-xs uppercase tracking-wider shrink-0 border-r-4 border-black z-10">
+                <AlertTriangle size={14}/>
+                LIVE
+            </div>
+            <div className="ticker-scroll whitespace-nowrap text-white text-xs font-mono font-bold tracking-wide">
+                <span className="inline-block ticker-content">{tickerText}   ///   {tickerText}</span>
+            </div>
+        </div>
+    );
 };
-
-return (
-    <div className="fixed bottom-0 left-0 right-0 z-[900] bg-black border-t-4 border-yellow-400 overflow-hidden h-10 flex items-center">
-        <div className="flex items-center gap-2 bg-yellow-400 text-black px-3 h-full font-black text-xs uppercase tracking-wider shrink-0 border-r-4 border-black z-10">
-            <AlertTriangle size={14}/>
-            LIVE
-        </div>
-        <div className="ticker-scroll whitespace-nowrap text-white text-xs font-mono font-bold tracking-wide">
-            <span className="inline-block ticker-content">{tickerText}   ///   {tickerText}</span>
-        </div>
-    </div>
-)
