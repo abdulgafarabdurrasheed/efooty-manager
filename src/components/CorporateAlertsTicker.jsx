@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { AlertTriangle } from "lucide-react";
 
-export default function CorporateAlrertsTicker({ players, matches }) {
+export default function CorporateAlertsTicker({ players, matches }) {
     const alerts = useMemo(() => {
         const msgs = [
             "MANDATORY: All pods must submit Q4 synergy reports by EOD",

@@ -21,7 +21,7 @@ import PlayerCard from './components/PlayerCard';
 import Toast from './components/Toast';
 import ViewFormationModal from './components/ViewFormationModal';
 import JoinLeagueButton from './components/JoinLeagueButton';
-import CorporateAlrertsTicker from './components/CorporateAlertsTicker';
+import CorporateAlertsTicker from './components/CorporateAlertsTicker';
 import AdminConfirmationModal from './components/AdminConfirmationModal';
 import DeleteTournamentModal from './components/DeleteTournamentModal';
 import ScoreEntryModal from './components/ScoreEntryModal';
