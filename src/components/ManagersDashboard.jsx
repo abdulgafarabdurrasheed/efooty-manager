@@ -8,11 +8,13 @@ import StandupFeed from './StandupFeed';
 import SynergyBurndownMatrix from './SynergyBurndownMatrix';
 import ChaosMonkeyModal from './ChaosMonkeyModal';
 import AbsurdOrgChart from './AbsurdOrgChart';
+import QuaterlyReportModal from './QuaterlyReportModal';
+import { FileText } from 'lucide-react';
 
 
 export default function ManagersDashboard({ 
-  project, 
-  user, 
+  project,
+  user,
   players,
   leaderboard, 
   recentReviews,
@@ -34,6 +36,7 @@ export default function ManagersDashboard({
   const isHybridMultiGroup = project?.format === 'HYBRID' && project?.settings?.hybridConfig?.type === 'MULTI_GROUP';
   const [selectedPipPlayer, setSelectedPipPlayer] = useState(null);
   const [isChaosOpen, setIsChaosOpen] = useState(false);
+  const [showQuaterlyReport, setShowQuaterlyReport] = useState(false)
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 pb-20">
@@ -65,6 +68,13 @@ export default function ManagersDashboard({
             </span>
           </button>
         )}
+
+        <button
+          onClick={() => setShowQuaterlyReport(true)}
+          className="flex items-center gap-2 bg-black text-white border-2 border-black px-4 py-2 font-bold uppercase hover:bg-yellow-400 hover:text-black transition-colors text-xs"
+        >
+          <FileText size={14} /> Quarterly Report
+        </button>
 
         <div className="bg-white  rounded-none border border-2 border-black overflow-hidden shadow-none">
           <div className="p-6 border-b border-2 border-black flex justify-between items-center bg-white">
@@ -101,7 +111,7 @@ export default function ManagersDashboard({
             />
           ) : (
             isHybridMultiGroup 
-              ? <MultiGroupTables 
+              ? <MultiGroupTables
                   leaderboard={leaderboard}
                   user={user}
                   project={project}
@@ -169,6 +179,12 @@ export default function ManagersDashboard({
           onRemoveDirector(targetId);
         }}
       />
+      {showQuaterlyReport && (
+        <QuaterlyReportModal
+          players={players}
+          onClose={() => setShowQuaterlyReport(false)}
+        />
+      )}
     </div>
   );
 }
