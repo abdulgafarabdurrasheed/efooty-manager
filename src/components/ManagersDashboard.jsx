@@ -1,5 +1,5 @@
 import React, { useState  } from 'react';
-import { Activity, GitBranch, Network, Crown, Trash2, LayoutTemplate } from 'lucide-react';
+import { Activity, GitBranch, Network, Crown, Trash2, LayoutTemplate, FileText, Monitor } from 'lucide-react';
 import LeagueTable, { MultiGroupTables } from './LeagueTable';
 import RecentActivity from './RecentActivity';
 import JoinLeagueButton from './JoinLeagueButton';
@@ -9,10 +9,10 @@ import SynergyBurndownMatrix from './SynergyBurndownMatrix';
 import ChaosMonkeyModal from './ChaosMonkeyModal';
 import AbsurdOrgChart from './AbsurdOrgChart';
 import QuaterlyReportModal from './QuaterlyReportModal';
-import { FileText } from 'lucide-react';
+import BoardMeetingMode from './BoardMeetingMode';
 
 
-export default function ManagersDashboard({ 
+export default function ManagersDashboard({
   project,
   user,
   players,
@@ -37,12 +37,13 @@ export default function ManagersDashboard({
   const [selectedPipPlayer, setSelectedPipPlayer] = useState(null);
   const [isChaosOpen, setIsChaosOpen] = useState(false);
   const [showQuaterlyReport, setShowQuaterlyReport] = useState(false)
+  const [showBoardMeeting, setShowBoardMeeting] = useState(false)
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 pb-20">
       <div className="tour-admin-panel lg:col-span-2 space-y-6">
         {showJoinButton && (
-          <JoinLeagueButton 
+          <JoinLeagueButton
               user={user} 
               onJoin={onAddPlayer} 
               existingPlayers={players} 
@@ -74,6 +75,13 @@ export default function ManagersDashboard({
           className="flex items-center gap-2 bg-black text-white border-2 border-black px-4 py-2 font-bold uppercase hover:bg-yellow-400 hover:text-black transition-colors text-xs"
         >
           <FileText size={14} /> Quarterly Report
+        </button>
+
+        <button
+          onClick={() => setShowBoardMeeting(true)}
+          className='flex items-center gap-2 bg-yellow-400 text-black border-2 border-black px-4 py-2 font-bold uppercase hover:bg-black hover:text-yellow-400 transition-colors text-xs'
+        >
+          <Monitor size={14} /> Board Meeting
         </button>
 
         <div className="bg-white  rounded-none border border-2 border-black overflow-hidden shadow-none">
@@ -185,6 +193,16 @@ export default function ManagersDashboard({
           onClose={() => setShowQuaterlyReport(false)}
         />
       )}
+      {showBoardMeeting && (
+        <BoardMeetingMode
+          project={project}
+          players={players}
+          matches={matches}
+          recentReviews={recentReviews}
+          onClose={() => setShowBoardMeeting(false)}
+        />
+      )}
+
     </div>
   );
 }

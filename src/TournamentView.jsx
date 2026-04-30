@@ -231,6 +231,8 @@ export default function ProjectView() {
                   onOpenAdminModal={openAdminModal}
                   onRemoveDirector={actions.handleRemoveDirector}
                   setActiveTab={setActiveTab}
+                  projectId={projectId}
+                  activeTab={activeTab}
                 />
               ) : (
                 <PlayerStatsView
@@ -240,6 +242,8 @@ export default function ProjectView() {
                   matches={matches}
                   getDirectorInfo={getDirectorInfo}
                   updateSquadStat={actions.updateSquadStat}
+                  projectId={projectId}
+                  activeTab={activeTab}
                 />
               )}
             </>
