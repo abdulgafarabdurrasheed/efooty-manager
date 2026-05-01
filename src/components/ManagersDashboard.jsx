@@ -1,5 +1,5 @@
 import React, { useState  } from 'react';
-import { Activity, GitBranch, Network, Crown, Trash2, LayoutTemplate, FileText, Monitor } from 'lucide-react';
+import { Activity, GitBranch, Network, Crown, Trash2, LayoutTemplate, FileText, Monitor, Mail} from 'lucide-react';
 import LeagueTable, { MultiGroupTables } from './LeagueTable';
 import RecentActivity from './RecentActivity';
 import JoinLeagueButton from './JoinLeagueButton';
@@ -10,6 +10,7 @@ import ChaosMonkeyModal from './ChaosMonkeyModal';
 import AbsurdOrgChart from './AbsurdOrgChart';
 import QuaterlyReportModal from './QuaterlyReportModal';
 import BoardMeetingMode from './BoardMeetingMode';
+import ExecutiveEmailModal from './ExecutiveEmailModal';
 
 
 export default function ManagersDashboard({
@@ -38,6 +39,7 @@ export default function ManagersDashboard({
   const [isChaosOpen, setIsChaosOpen] = useState(false);
   const [showQuaterlyReport, setShowQuaterlyReport] = useState(false)
   const [showBoardMeeting, setShowBoardMeeting] = useState(false)
+  const [showExecutiveEmail, setShowExecutiveEmail] = useState(false)
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 pb-20">
@@ -83,6 +85,14 @@ export default function ManagersDashboard({
         >
           <Monitor size={14} /> Board Meeting
         </button>
+
+        <button
+          onClick={() => setShowExecutiveEmail(true)}
+          className="flex items-center gap-2 bg-white text-black border-2 border-black px-4 py-2 font-bold uppercase hover:bg-black hover:text-white transition-colors text-xs"
+        >
+          <Mail size={14} /> Email Digest
+        </button>
+
 
         <div className="bg-white  rounded-none border border-2 border-black overflow-hidden shadow-none">
           <div className="p-6 border-b border-2 border-black flex justify-between items-center bg-white">
@@ -200,6 +210,14 @@ export default function ManagersDashboard({
           matches={matches}
           recentReviews={recentReviews}
           onClose={() => setShowBoardMeeting(false)}
+        />
+      )}
+      {showExecutiveEmail && (
+        <ExecutiveEmailModal
+          project={project}
+          players={players}
+          matches={matches}
+          onClose={() => setShowExecutiveEmail(false)}
         />
       )}
 

@@ -129,7 +129,7 @@ export default function App() {
               <h1 className="font-mono text-xl font-black text-black tracking-tight hidden sm:block">
                 E.F.O.O.T.Y <span className="font-mono text-black">Director</span>
               </h1>
-            </div>
+            </div> 
             
             <div>
               {user ? <UserProfile user={user} /> : <LoginButton />} 
