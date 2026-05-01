@@ -21,38 +21,80 @@ function WelcomeScreen({ showDemo, handleDemoComplete }) {
     return <InteractiveDemo onComplete={handleDemoComplete} />;
   }
 
+  const features = [
+    { icon: '', title: 'KPI Tracking', desc: 'Real-time yield metrics across all pods' },
+    { icon: '', title: 'AI Oracle', desc: 'Gemini-powered executive agile coaching' },
+    { icon: '', title: 'Sprint Pipeline', desc: 'Drag-and-drop Kanban board for sprints' },
+    { icon: '', title: 'Chaos Monkey', desc: 'Automated resource optimization engine' },
+    { icon: '', title: 'Board Meeting', desc: 'Auto-cycling presentation mode for execs' },
+    { icon: '', title: 'Live Alerts', desc: 'Real-time corporate compliance ticker' },
+  ];
+
   return (
-    <div className="font-mono flex flex-col items-center justify-center h-[80vh] text-center space-y-6 px-4">
-      <div className="font-mono bg-white p-6 rounded-none mb-4 shadow-none shadow-none/10 ring-1 ring-slate-800">
-        <Briefcase size={64} className="font-mono text-black" />
-      </div>
-      <h2 className="font-mono text-4xl md:text-5xl font-black text-black tracking-tight">
-        Welcome to <span className="font-mono text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">E.F.O.O.T.Y Director</span>
-      </h2>
-      <p className="font-mono text-black max-w-lg text-lg leading-relaxed">
-        The ultimate project tracker for your local initiatives. Sign in to manage your organization, track KPIs, and hit revenue targets.
-      </p>
-      <div className="font-mono mt-8 flex flex-col gap-4 transform scale-110">
-        <LoginButton />
-        <button 
-          onClick={() => navigate('/project/demo-project')}
-          className="bg-black text-white font-bold py-2 px-6 hover:bg-yellow-400 hover:text-black transition-colors uppercase border-2 border-black"
-        >
-          Explore Demo Project
-        </button>
+    <div className="font-mono min-h-[90vh] bg-black text-white flex flex-col items-center justify-center px-6 py-16 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 49px, white 49px, white 50px), repeating-linear-gradient(90deg, transparent, transparent 49px, white 49px, white 50px)',
+      }} />
+
+      <div className="relative z-10 flex flex-col items-center text-center max-w-4xl">
+        <div className="border-2 border-yellow-400 px-4 py-1 mb-8">
+          <span className="text-xs font-black uppercase tracking-[0.3em] text-yellow-400">Enterprise Framework</span>
+        </div>
+
+        <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-none mb-4">
+          E.F.O.O.T.Y
+        </h1>
+        <h2 className="text-lg md:text-xl font-bold text-white/60 uppercase tracking-widest mb-2">
+          Enterprise Framework for Objective
+        </h2>
+        <h2 className="text-lg md:text-xl font-bold text-white/60 uppercase tracking-widest mb-8">
+          & Outcome Tracking Yields
+        </h2>
+
+        <div className="w-24 h-1 bg-yellow-400 mb-8" />
+
+        <p className="text-white/70 max-w-xl text-base leading-relaxed mb-12 font-medium">
+          The definitive enterprise dashboard for deploying initiatives, tracking sprint velocity,
+          and enforcing corporate compliance through data-driven yield optimization.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 mb-16">
+          <LoginButton />
+          <button
+            onClick={() => navigate('/project/demo-project')}
+            className="bg-yellow-400 text-black font-black py-3 px-8 uppercase border-2 border-yellow-400 hover:bg-transparent hover:text-yellow-400 transition-colors tracking-wider"
+          >
+            Explore Demo Project →
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-3xl">
+          {features.map(f => (
+            <div key={f.title} className="border border-white/10 p-4 text-left hover:border-yellow-400/50 transition-colors">
+              <span className="text-2xl mb-2 block">{f.icon}</span>
+              <h3 className="font-black uppercase text-sm tracking-tight mb-1">{f.title}</h3>
+              <p className="text-xs text-white/40 font-medium">{f.desc}</p>
+            </div>
+          ))}
+        </div> 
+
+        <p className="mt-12 text-[10px] text-white/20 uppercase tracking-widest font-bold">
+          Built with React • Firebase • Gemini AI • Tailwind CSS
+        </p>
       </div>
     </div>
-  );
+  ); 
 }
 
-export default function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showDemo, setShowDemo] = useState(() => !localStorage.getItem('hasSeenDemo'));
 
-  const handleDemoComplete = () => {
+export default function App() {
+  const [user, setUser] = useState(null);  
+  const [loading, setLoading] = useState(true);
+  const [showDemo, setShowDemo] = useState(() => !localStorage.getItem('hasSeenDemo')); 
+
+  const handleDemoComplete = () => { 
     localStorage.setItem('hasSeenDemo', 'true');
-    setShowDemo(false);
+    setShowDemo(false); 
   }
 
   useEffect(() => {
@@ -90,10 +132,10 @@ export default function App() {
             </div>
             
             <div>
-              {user ? <UserProfile user={user} /> : <LoginButton />}
+              {user ? <UserProfile user={user} /> : <LoginButton />} 
             </div>
           </div>
-        </header>
+        </header> 
 
         <main>
           <Routes>
@@ -107,5 +149,5 @@ export default function App() {
         </main>
       </div>
     </BrowserRouter>
-  );
+  ); 
 }
